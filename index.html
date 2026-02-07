@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daniela ❤️ Jem</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #fff0f5;
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+      position: relative;
+      text-align: center;
+    }
+
+    .heart, .confetti-piece {
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .heart {
+      color: #ff4d6d;
+      font-size: 4vw;
+      animation: float 6s linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-50vh) translateX(5vw) rotate(360deg); opacity: 0; }
+    }
+
+    .polaroid {
+      background: #fff;
+      padding: 4vw 4vw 8vw;
+      box-shadow: 0 1vw 2vw rgba(0,0,0,0.2);
+      border-radius: 3vw;
+      transform: rotate(-2deg);
+      animation: floatPolaroid 3s ease-in-out infinite alternate;
+      max-width: 90%;
+      z-index: 1;
+    }
+
+    @keyframes floatPolaroid {
+      0% { transform: rotate(-2deg) translateY(0px); }
+      100% { transform: rotate(2deg) translateY(-1vw); }
+    }
+
+    img {
+      width: 80%;
+      max-width: 250px;
+      border-radius: 2vw;
+      margin-bottom: 4vw;
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 8vw;
+      color: #d6336c;
+      margin: 0 0 2vw;
+    }
+
+    p {
+      font-size: 4vw;
+      color: #555;
+      margin: 0 0 4vw;
+    }
+
+    button {
+      padding: 2vw 4vw;
+      margin: 2vw;
+      border: none;
+      border-radius: 2vw;
+      font-size: 4vw;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    button.yes {
+      background-color: #ff4d6d;
+      color: white;
+    }
+
+    button.yes:hover { transform: scale(1.1); }
+
+    button.no {
+      background-color: #ccc;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="polaroid">
+    <img src="https://drive.google.com/uc?export=view&id=1GcvyjjpqOkjk20S-tB6F4ZobNavZw3m-" alt="Daniela">
+    <h1>Daniela ❤️ Jem</h1>
+    <p>Will you be my Valentine?</p>
+
+    <!-- Yes/No buttons -->
+    <div id="answerButtons">
+      <button class="yes" onclick="answerYes()">Yes 💖</button>
+      <button class="no" id="noBtn">No 😢</button>
+    </div>
+
+    <p id="response" style="font-size:5vw; color:#d6336c; margin-top:4vw;"></p>
+  </div>
+
+  <div id="hearts"></div>
+
+  <!-- Music -->
+  <audio id="music" loop autoplay>
+    <source src="https://drive.google.com/uc?export=download&id=1GaS3i9hapt8kv_Wv4FG1YeZsy6L2XhFf" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const music = document.getElementById('music');
+    music.volume = 0.5; // lower volume for comfort
+
+    // Automatically play on load (modern browsers may need user gesture on mobile)
+    document.addEventListener("DOMContentLoaded", () => {
+      const playPromise = music.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // auto-play blocked, fallback: wait for first touch
+          document.body.addEventListener('touchstart', () => music.play(), { once: true });
+        });
+      }
+    });
+
+    // Floating hearts
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.fontSize = (4 + Math.random() * 6) + 'vw';
+      heart.style.animationDuration = (4 + Math.random() * 4) + 's';
+      heart.innerText = '❤️';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+    setInterval(createHeart, 400);
+
+    // No button impossible to click
+    const noBtn = document.getElementById('noBtn');
+    noBtn.addEventListener('mouseover', () => {
+      const x = Math.random() * 30 - 15;
+      const y = Math.random() * 10 - 5;
+      noBtn.style.transform = `translate(${x}vw, ${y}vw)`;
+    });
+
+    // Yes button click
+    function answerYes() {
+      document.getElementById('response').innerText = "Yay! 💖 I’m so happy! Love you, Daniela!";
+      document.getElementById('answerButtons').style.display = 'none';
+      for(let i=0;i<50;i++) setTimeout(createHeart, i*100);
+      createConfetti();
+    }
+
+    // Confetti effect
+    function createConfetti() {
+      const colors = ["#ff4d6d","#ffb6c1","#ffd700","#ff69b4","#ff8c00"];
+      for(let i=0;i<100;i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti-piece';
+        confetti.style.width = '3vw';
+        confetti.style.height = '3vw';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+        confetti.style.left = Math.random()*window.innerWidth+'px';
+        confetti.style.top = '-5vw';
+        confetti.style.opacity = Math.random();
+        confetti.style.transform = `rotate(${Math.random()*360}deg)`;
+        document.body.appendChild(confetti);
+
+        const fallDuration = 3000 + Math.random()*2000;
+        const horizontalMovement = (Math.random()-0.5)*20;
+        confetti.animate([
+          { transform: `translate(0,0) rotate(${Math.random()*360}deg)` },
+          { transform: `translate(${horizontalMovement}vw, ${window.innerHeight}vw) rotate(${Math.random()*720}deg)` }
+        ], { duration: fallDuration, easing: 'linear', fill: 'forwards' });
+
+        setTimeout(()=>confetti.remove(), fallDuration);
+      }
+    }
+  </script>
+</body>
+</html>
